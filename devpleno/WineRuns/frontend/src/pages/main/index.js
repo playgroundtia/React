@@ -1,20 +1,21 @@
 import React from 'react';
 import t from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { HOME, DASHBOARD } from '../../routes';
 
 const Admin = React.lazy(() => import('../admin'));
 const Home = React.lazy(() => import('../home'));
 
-const Main = ({ auth, location, redirect }) => {
+const Main = ({ auth, location }) => {
+  const regex = /^\/admin/gi;
+
   if (auth.isAuth && location.pathname === HOME) {
-    return redirect(DASHBOARD);
+    return <Redirect to={DASHBOARD} />;
   }
 
-  if (!auth.isAuth && location.pathname === DASHBOARD) {
-    return redirect(HOME);
+  if (!auth.isAuth && regex.test(location.pathname)) {
+    return <Redirect to={HOME} />;
   }
 
   return (
@@ -27,11 +28,8 @@ const Main = ({ auth, location, redirect }) => {
       }
     >
       <Switch>
-        {auth.isAuth ? (
-          <Route component={Admin} />
-        ) : (
-          <Route path={HOME} component={Home} />
-        )}
+        <Route exact path={HOME} component={Home} />
+        <Route component={Admin} />
       </Switch>
     </React.Suspense>
   );
@@ -41,7 +39,6 @@ Main.propTypes = {
   location: t.shape({
     pathname: t.string,
   }).isRequired,
-  redirect: t.func.isRequired,
   auth: t.shape({
     isAuth: t.bool,
   }).isRequired,
@@ -51,11 +48,4 @@ const mapStateToProps = ({ auth }) => ({
   auth,
 });
 
-const mapDispatchToProps = dispatch => ({
-  redirect: router => dispatch(push(router)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Main);
+export default connect(mapStateToProps)(Main);

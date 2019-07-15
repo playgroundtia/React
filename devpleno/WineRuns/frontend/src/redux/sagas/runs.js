@@ -1,16 +1,17 @@
-import { call } from 'redux-saga/effects';
-// import jwtDecode from 'jwt-decode';
-// import { toast } from 'react-toastify';
+import { call, put } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
+import ActionCreators from '../actionsCreators';
 import api from '../../services/api';
-// import ActionsCreators, { Types } from '../actionsCreators';
+
+const token = localStorage.getItem('@WineRuns/TOKEN');
 
 export function* getRuns() {
-  const data = yield call(api.get, '/runs');
-  console.log(data);
-  // yield all([
-  //   // takeLatest(Types.SIGNIN_REQUEST, login),
-  //   // takeLatest(Types.AUTH_REQUEST, auth),
-  //   // takeLatest(Types.LOGOUT, logout),
-  //   // put(ActionsCreators.authRequest()),
-  // ]);
+  const headerParams = { Authorization: `Bearer ${token}` };
+  try {
+    const { data } = yield call(api.get, '/runs', { headers: headerParams });
+    yield put(ActionCreators.getRunsSuccess(data));
+  } catch (error) {
+    yield put(ActionCreators.getRunsFailure('error'));
+    toast.warn('sem comunicação com a api.');
+  }
 }

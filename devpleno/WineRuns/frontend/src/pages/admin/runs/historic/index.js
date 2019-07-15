@@ -7,10 +7,12 @@ import { faRunning } from '@fortawesome/free-solid-svg-icons';
 import ReactTable from 'react-table';
 import ActionsCreators from '../../../../redux/actionsCreators';
 
-const Historic = ({ getRuns }) => {
+const Historic = ({ getRuns, runs }) => {
   React.useEffect(() => {
     getRuns();
   }, [getRuns]);
+
+  // console.log(runs);
 
   const data = [
     {
@@ -73,26 +75,36 @@ const Historic = ({ getRuns }) => {
 
   const columns = [
     {
-      Header: 'Name',
-      accessor: 'name', // String-based value accessors!
+      Header: 'Friendly Name',
+      accessor: 'friendly_name', // String-based value accessors!
     },
     {
-      Header: 'Age',
-      accessor: 'age',
+      Header: 'Duration',
+      accessor: 'duration',
       Cell: props => <span className="number">{props.value}</span>, // Custom cell components!
     },
     {
-      id: 'friendName', // Required because our accessor is not a string
-      Header: 'Friend Name',
-      accessor: d => d.friend.name, // Custom value accessors!
+      Header: 'Distance',
+      accessor: 'distance',
+      Cell: props => <span className="number">{props.value}</span>, // Custom cell components!
     },
     {
-      Header: props => <span>Friend Age</span>, // Custom header components!
-      accessor: 'friend.age',
+      Header: 'Created',
+      accessor: 'created',
+      Cell: props => <span className="number">{props.value}</span>, // Custom cell components!
     },
+    // {
+    //   id: 'friendName', // Required because our accessor is not a string
+    //   Header: 'Friend Name',
+    //   accessor: d => d.friend.name, // Custom value accessors!
+    // },
+    // {
+    //   Header: props => <span>Friend Age</span>, // Custom header components!
+    //   accessor: 'friend.age',
+    // },
   ];
   return (
-    <div className="card is-card-table has-pagination has-table-borderless has-bottom-left-hidden">
+    <div className="card-no-box-shadow">
       <Card.Header>
         <p className="card-header-title">
           <Icon>
@@ -102,7 +114,13 @@ const Historic = ({ getRuns }) => {
         </p>
       </Card.Header>
       <Card.Content>
-        <ReactTable data={data} columns={columns} minRows={5} />
+        <ReactTable
+          noDataText="No runs found"
+          showPageSizeOptions={false}
+          defaultPageSize={5}
+          data={[]}
+          columns={columns}
+        />
       </Card.Content>
     </div>
   );
