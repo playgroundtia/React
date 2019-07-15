@@ -17,6 +17,10 @@ export const { Types, Creators } = createActions({
   getRunsRequest: null,
   getRunsSuccess: ['runs'],
   getRunsFailure: ['error'],
+
+  createRunRequest: ['run'],
+  createRunSuccess: ['run'],
+  createRunFailure: ['error'],
 });
 
 export default Creators;

@@ -5,73 +5,71 @@ import { Card, Icon } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRunning } from '@fortawesome/free-solid-svg-icons';
 import ReactTable from 'react-table';
-import ActionsCreators from '../../../../redux/actionsCreators';
+import ActionsCreators from '~/redux/actionsCreators';
 
 const Historic = ({ getRuns, runs }) => {
   React.useEffect(() => {
     getRuns();
   }, [getRuns]);
 
-  // console.log(runs);
-
-  const data = [
-    {
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      },
-    },
-    {
-      name: 'Tanner Linsley',
-      age: 2,
-      friend: {
-        name: 'Jason Maurer',
-        age: 3,
-      },
-    },
-    {
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      },
-    },
-    {
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      },
-    },
-    {
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      },
-    },
-    {
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      },
-    },
-    {
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      },
-    },
-  ];
+  // const data = [
+  //   {
+  //     name: 'Tanner Linsley',
+  //     age: 26,
+  //     friend: {
+  //       name: 'Jason Maurer',
+  //       age: 23,
+  //     },
+  //   },
+  //   {
+  //     name: 'Tanner Linsley',
+  //     age: 2,
+  //     friend: {
+  //       name: 'Jason Maurer',
+  //       age: 3,
+  //     },
+  //   },
+  //   {
+  //     name: 'Tanner Linsley',
+  //     age: 26,
+  //     friend: {
+  //       name: 'Jason Maurer',
+  //       age: 23,
+  //     },
+  //   },
+  //   {
+  //     name: 'Tanner Linsley',
+  //     age: 26,
+  //     friend: {
+  //       name: 'Jason Maurer',
+  //       age: 23,
+  //     },
+  //   },
+  //   {
+  //     name: 'Tanner Linsley',
+  //     age: 26,
+  //     friend: {
+  //       name: 'Jason Maurer',
+  //       age: 23,
+  //     },
+  //   },
+  //   {
+  //     name: 'Tanner Linsley',
+  //     age: 26,
+  //     friend: {
+  //       name: 'Jason Maurer',
+  //       age: 23,
+  //     },
+  //   },
+  //   {
+  //     name: 'Tanner Linsley',
+  //     age: 26,
+  //     friend: {
+  //       name: 'Jason Maurer',
+  //       age: 23,
+  //     },
+  //   },
+  // ];
 
   const columns = [
     {
@@ -105,14 +103,14 @@ const Historic = ({ getRuns, runs }) => {
   ];
   return (
     <div className="card-no-box-shadow">
-      <div className="card-header-no-box-shadow">
+      <header className="card-header">
         <p className="card-header-title">
           <Icon>
             <FontAwesomeIcon icon={faRunning} />
           </Icon>
           <span>Runs</span>
         </p>
-      </div>
+      </header>
       <Card.Content>
         <ReactTable
           noDataText="No runs found"

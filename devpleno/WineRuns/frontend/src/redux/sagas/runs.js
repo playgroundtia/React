@@ -15,3 +15,18 @@ export function* getRuns() {
     toast.warn('sem comunicação com a api.');
   }
 }
+
+export function* createRun(action) {
+  const headerParams = { Authorization: `Bearer ${token}` };
+  try {
+    const { data } = yield call(
+      api.post,
+      '/runs',
+      { headers: headerParams },
+      action
+    );
+    yield put(ActionCreators.createRunSuccess(data));
+  } catch (error) {
+    yield put(ActionCreators.createRunFailure('error'));
+  }
+}

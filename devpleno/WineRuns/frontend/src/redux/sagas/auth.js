@@ -2,7 +2,7 @@ import { put, call } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import jwtDecode from 'jwt-decode';
 import { toast } from 'react-toastify';
-import api from '../../services/api';
+import api from '~/services/api';
 import ActionsCreators from '../actionsCreators';
 
 export function* login(action) {

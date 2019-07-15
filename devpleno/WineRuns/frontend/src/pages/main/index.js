@@ -2,10 +2,10 @@ import React from 'react';
 import t from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { HOME, DASHBOARD } from '../../routes';
+import { HOME, DASHBOARD } from '~/routes';
 
-const Admin = React.lazy(() => import('../admin'));
-const Home = React.lazy(() => import('../home'));
+const Admin = React.lazy(() => import('~/pages/admin'));
+const Home = React.lazy(() => import('~/pages/home'));
 
 const Main = ({ auth, location }) => {
   const regex = /^\/admin/gi;

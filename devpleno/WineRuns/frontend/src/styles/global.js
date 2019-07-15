@@ -6,6 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-table/react-table.css';
 
 export default createGlobalStyle`
+
+  html {
+    background-color: #f8f8f8;
+  }
+
+
   .activeNavBar {
     border-bottom-color: #00dfdf;
     border-bottom-style: solid;
@@ -20,7 +26,6 @@ export default createGlobalStyle`
 
   .is-title-bar {
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(24,28,33,.06);
   }
 
   .section.is-title-bar ul li {

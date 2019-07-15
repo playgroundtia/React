@@ -139,7 +139,7 @@ const Header = ({ signin, logout, showModal, hideModal, auth }) => {
             <Modal.Card.Title>Log in</Modal.Card.Title>
           </Modal.Card.Head>
           <Modal.Card.Body>
-            <form action="">
+            <form>
               <Form.Field>
                 <Form.Label>E-mail</Form.Label>
                 <Form.Control iconLeft iconRight>

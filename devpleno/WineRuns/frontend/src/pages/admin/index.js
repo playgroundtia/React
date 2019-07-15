@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Header from '../../components/Header';
-import { DASHBOARD } from '../../routes';
+import Header from '~/components/Header';
+import { DASHBOARD } from '~/routes';
 
 const Dashboard = React.lazy(() => import('./dashboard'));
 const Runs = React.lazy(() => import('./runs'));
