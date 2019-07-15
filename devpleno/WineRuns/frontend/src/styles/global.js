@@ -43,10 +43,19 @@ export default createGlobalStyle`
 
   .card-no-box-shadow {
     background-color: #fff;
-    /* box-shadow: 0 2px 3px rgba(10,10,10,.1),0 0 0 1px rgba(10,10,10,.1); */
     color: #4a4a4a;
     max-width: 100%;
     position: relative;
+  }
+
+  .card-header-no-box-shadow {
+    background-color: transparent;
+    align-items: stretch;
+    display: flex;
+  }
+
+  .nav-padding {
+    padding: 0 30px;
   }
 
 

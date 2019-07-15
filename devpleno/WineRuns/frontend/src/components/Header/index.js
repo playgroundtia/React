@@ -27,7 +27,7 @@ const Header = ({ signin, logout, showModal, hideModal, auth }) => {
 
   return (
     <>
-      <Navbar color="dark" fixed="top">
+      <Navbar color="dark" fixed="top" className="nav-padding">
         <Navbar.Brand>
           <Navbar.Item>
             <img src={Logo} alt="WineRuns" width="112" height="28" />

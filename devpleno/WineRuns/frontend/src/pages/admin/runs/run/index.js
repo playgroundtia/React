@@ -6,7 +6,7 @@ import { faRunning } from '@fortawesome/free-solid-svg-icons';
 export default function Run() {
   return (
     <div className="card-no-box-shadow">
-      <Card.Header>
+      <div className="card-header-no-box-shadow">
         <Card.Header.Title>
           <Card.Header.Icon>
             <Icon>
@@ -15,7 +15,7 @@ export default function Run() {
             Details run
           </Card.Header.Icon>
         </Card.Header.Title>
-      </Card.Header>
+      </div>
     </div>
   );
 }

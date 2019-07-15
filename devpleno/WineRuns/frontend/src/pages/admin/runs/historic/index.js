@@ -105,14 +105,14 @@ const Historic = ({ getRuns, runs }) => {
   ];
   return (
     <div className="card-no-box-shadow">
-      <Card.Header>
+      <div className="card-header-no-box-shadow">
         <p className="card-header-title">
           <Icon>
             <FontAwesomeIcon icon={faRunning} />
           </Icon>
           <span>Runs</span>
         </p>
-      </Card.Header>
+      </div>
       <Card.Content>
         <ReactTable
           noDataText="No runs found"
