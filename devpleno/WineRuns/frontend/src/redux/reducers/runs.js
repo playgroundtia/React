@@ -21,7 +21,7 @@ export const getRunsSuccess = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isLoading: false,
-    data: action.runs,
+    data: action.runs.data,
   };
 };
 

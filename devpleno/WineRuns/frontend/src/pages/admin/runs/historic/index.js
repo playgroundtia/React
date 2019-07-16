@@ -1,9 +1,14 @@
 import React from 'react';
 import t from 'prop-types';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { Card, Icon } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRunning } from '@fortawesome/free-solid-svg-icons';
+import {
+  faRunning,
+  faTrashAlt,
+  faEdit,
+} from '@fortawesome/free-solid-svg-icons';
 import ReactTable from 'react-table';
 import ActionsCreators from '~/redux/actionsCreators';
 
@@ -12,94 +17,60 @@ const Historic = ({ getRuns, runs }) => {
     getRuns();
   }, [getRuns]);
 
-  // const data = [
-  //   {
-  //     name: 'Tanner Linsley',
-  //     age: 26,
-  //     friend: {
-  //       name: 'Jason Maurer',
-  //       age: 23,
-  //     },
-  //   },
-  //   {
-  //     name: 'Tanner Linsley',
-  //     age: 2,
-  //     friend: {
-  //       name: 'Jason Maurer',
-  //       age: 3,
-  //     },
-  //   },
-  //   {
-  //     name: 'Tanner Linsley',
-  //     age: 26,
-  //     friend: {
-  //       name: 'Jason Maurer',
-  //       age: 23,
-  //     },
-  //   },
-  //   {
-  //     name: 'Tanner Linsley',
-  //     age: 26,
-  //     friend: {
-  //       name: 'Jason Maurer',
-  //       age: 23,
-  //     },
-  //   },
-  //   {
-  //     name: 'Tanner Linsley',
-  //     age: 26,
-  //     friend: {
-  //       name: 'Jason Maurer',
-  //       age: 23,
-  //     },
-  //   },
-  //   {
-  //     name: 'Tanner Linsley',
-  //     age: 26,
-  //     friend: {
-  //       name: 'Jason Maurer',
-  //       age: 23,
-  //     },
-  //   },
-  //   {
-  //     name: 'Tanner Linsley',
-  //     age: 26,
-  //     friend: {
-  //       name: 'Jason Maurer',
-  //       age: 23,
-  //     },
-  //   },
-  // ];
-
   const columns = [
     {
       Header: 'Friendly Name',
-      accessor: 'friendly_name', // String-based value accessors!
+      accessor: 'friendly_name',
     },
     {
       Header: 'Duration',
       accessor: 'duration',
-      Cell: props => <span className="number">{props.value}</span>, // Custom cell components!
+      Cell: data => (
+        <div className="has-text-centered">
+          <span>{data.value}</span>
+        </div>
+      ),
     },
     {
       Header: 'Distance',
       accessor: 'distance',
-      Cell: props => <span className="number">{props.value}</span>, // Custom cell components!
+      Cell: data => (
+        <div className="has-text-centered">
+          <span>{data.value}m</span>
+        </div>
+      ),
     },
     {
       Header: 'Created',
       accessor: 'created',
-      Cell: props => <span className="number">{props.value}</span>, // Custom cell components!
+      Cell: data => (
+        <div className="has-text-centered">
+          <span>{moment.utc(data.value).format('DD/MM/YYYY h:mm:ss')}</span>
+        </div>
+      ),
     },
-    // {
-    //   id: 'friendName', // Required because our accessor is not a string
-    //   Header: 'Friend Name',
-    //   accessor: d => d.friend.name, // Custom value accessors!
-    // },
-    // {
-    //   Header: props => <span>Friend Age</span>, // Custom header components!
-    //   accessor: 'friend.age',
-    // },
+    {
+      Header: '',
+      Cell: data => (
+        <div className="has-text-">
+          <button
+            className="button is-primary is-small"
+            onClick={() => console.log(data.original)}
+          >
+            {/* <span>Edit</span> */}
+            <Icon>
+              <FontAwesomeIcon icon={faEdit} />
+            </Icon>
+          </button>
+          <button className="button is-danger is-small">
+            {/* <span>Delete</span> */}
+            <Icon>
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </Icon>
+          </button>
+        </div>
+      ),
+    },
   ];
   return (
     <div className="card-no-box-shadow">
@@ -113,15 +84,26 @@ const Historic = ({ getRuns, runs }) => {
       </header>
       <Card.Content>
         <ReactTable
+          className="-striped -highlight"
           noDataText="No runs found"
           showPageSizeOptions={false}
           defaultPageSize={5}
-          data={[]}
+          data={runs.data}
           columns={columns}
         />
       </Card.Content>
     </div>
   );
+};
+
+Historic.propTypes = {
+  getRuns: t.func.isRequired,
+  data: t.shape({
+    value: t.string,
+  }).isRequired,
+  runs: t.shape({
+    data: t.array,
+  }).isRequired,
 };
 
 const mapStateToProps = ({ runs }) => ({
