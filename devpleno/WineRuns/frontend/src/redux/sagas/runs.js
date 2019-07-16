@@ -3,9 +3,8 @@ import { toast } from 'react-toastify';
 import ActionCreators from '../actionsCreators';
 import api from '../../services/api';
 
-const token = localStorage.getItem('@WineRuns/TOKEN');
-
 export function* getRuns() {
+  const token = localStorage.getItem('@WineRuns/TOKEN');
   const headerParams = { Authorization: `Bearer ${token}` };
   try {
     const { data } = yield call(api.get, '/runs', { headers: headerParams });
@@ -16,15 +15,13 @@ export function* getRuns() {
   }
 }
 
-export function* createRun(action) {
+export function* createRun({ run }) {
+  const token = localStorage.getItem('@WineRuns/TOKEN');
   const headerParams = { Authorization: `Bearer ${token}` };
   try {
-    const { data } = yield call(
-      api.post,
-      '/runs',
-      { headers: headerParams },
-      action
-    );
+    const { data } = yield call(api.post, '/runs', run, {
+      headers: headerParams,
+    });
     yield put(ActionCreators.createRunSuccess(data));
   } catch (error) {
     yield put(ActionCreators.createRunFailure('error'));

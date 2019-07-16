@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   Card,
   Icon,
@@ -9,15 +10,25 @@ import {
   Heading,
   Level,
 } from 'react-bulma-components';
+import Flatpickr from 'react-flatpickr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRunning, faSave } from '@fortawesome/free-solid-svg-icons';
 import useForm from 'react-hook-form';
+import moment from 'moment';
+import ActionsCreators from '~/redux/actionsCreators';
 
-export default function Run() {
-  const { handleSubmit, register, errors } = useForm();
+const Run = ({ getRuns, runs, auth }) => {
+  const { handleSubmit, register, errors, setValue } = useForm();
   const [showMessage, setShowMessage] = React.useState(false);
+
+  React.useEffect(() => {
+    register({ name: 'created' });
+  }, [register]);
+
   const onSubmit = values => {
-    setShowMessage(true);
+    // setShowMessage(true);
+    getRuns(values);
+    console.log(values);
   };
 
   return (
@@ -118,17 +129,21 @@ export default function Run() {
               </div>
             </div>
           </Columns.Column>
-          <Columns.Column size={4}>
+          <Columns.Column size={3}>
             <div className="field">
               <Form.Label>Created</Form.Label>
               <div className="control">
-                <input
-                  ref={register({
-                    required: 'This field is required',
-                  })}
-                  name="created"
+                <Flatpickr
                   className="input"
-                  type="text"
+                  options={{
+                    enableTime: true,
+                    time_24hr: true,
+                    dateFormat: 'F, d Y H:i',
+                    maxDate: 'today',
+                  }}
+                  onChange={val => {
+                    setValue('created', val[0]);
+                  }}
                 />
                 {errors.created && (
                   <p className="help is-danger">{errors.created.message}</p>
@@ -163,4 +178,18 @@ export default function Run() {
       </Card.Content>
     </div>
   );
-}
+};
+
+const mapStateToProps = ({ runs, auth }) => ({
+  runs,
+  auth,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getRuns: run => dispatch(ActionsCreators.createRunRequest(run)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Run);

@@ -3,9 +3,11 @@ import { Types } from '../actionsCreators';
 
 export const INITIAL_STATE = {
   isLoading: false,
+  isSaving: false,
   data: [],
   error: false,
   errorMessage: '',
+  saved: false,
 };
 
 export const getRunsRequest = (state = INITIAL_STATE) => {
@@ -35,22 +37,26 @@ export const getRunsFailure = (state = INITIAL_STATE, action) => {
 export const createRunRequest = (state = INITIAL_STATE) => {
   return {
     ...state,
-    isLoading: true,
+    isSaving: true,
+    saved: false,
+    error: false,
+    errorMessage: '',
   };
 };
 
-export const createRunSuccess = (state = INITIAL_STATE, action) => {
+export const createRunSuccess = (state = INITIAL_STATE) => {
   return {
     ...state,
-    isLoading: false,
-    data: action.runs,
+    isSaving: false,
+    saved: true,
   };
 };
 
 export const createRunFailure = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    isLoading: false,
+    isSaving: false,
+    saved: false,
     error: true,
     errorMessage: action.error,
   };

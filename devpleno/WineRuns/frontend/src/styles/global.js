@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
+import 'flatpickr/dist/themes/material_green.css';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-table/react-table.css';
