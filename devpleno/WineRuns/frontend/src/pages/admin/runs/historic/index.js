@@ -2,7 +2,7 @@ import React from 'react';
 import t from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Card, Icon } from 'react-bulma-components';
+import { Card, Icon, Modal } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRunning,
@@ -13,6 +13,8 @@ import ReactTable from 'react-table';
 import ActionsCreators from '~/redux/actionsCreators';
 
 const Historic = ({ getRuns, runs }) => {
+  const [showModalDelete, setShowModalDelete] = React.useState(false);
+  const [objDelete, setObjDelete] = React.useState({});
   React.useEffect(() => {
     getRuns();
   }, [getRuns]);
@@ -52,18 +54,23 @@ const Historic = ({ getRuns, runs }) => {
     {
       Header: '',
       Cell: data => (
-        <div className="has-text-">
+        <div className="has-text-centered">
           <button
             className="button is-primary is-small"
             onClick={() => console.log(data.original)}
           >
-            {/* <span>Edit</span> */}
             <Icon>
               <FontAwesomeIcon icon={faEdit} />
             </Icon>
           </button>
-          <button className="button is-danger is-small">
-            {/* <span>Delete</span> */}
+          <button
+            className="button is-danger is-small"
+            onClick={() => {
+              setShowModalDelete(!showModalDelete);
+              setObjDelete(data.original);
+              console.log(data.original);
+            }}
+          >
             <Icon>
               <FontAwesomeIcon icon={faTrashAlt} />
             </Icon>
@@ -92,6 +99,48 @@ const Historic = ({ getRuns, runs }) => {
           columns={columns}
         />
       </Card.Content>
+      <Modal
+        show={showModalDelete}
+        showClose
+        onClose={() => setShowModalDelete(!showModalDelete)}
+      >
+        <Modal.Content>
+          <section className="hero is-danger is-bold">
+            <div className="hero-body">
+              <div className="container">
+                <h1 className="title">Delete</h1>
+                <h2 className="subtitle">
+                  Want to {objDelete.friendly_name} ?
+                </h2>
+              </div>
+            </div>
+            <div className="hero-foot">
+              <nav className="tabs">
+                <div className="container">
+                  <span className="navbar-item">
+                    <div className="buttons">
+                      <button className="button is-info">
+                        <span>Yes, delete!</span>
+                      </button>
+                      <button className="button" onClick={() => {}}>
+                        <span>No!</span>
+                      </button>
+                    </div>
+                  </span>
+                </div>
+              </nav>
+            </div>
+          </section>
+          {/* <Modal.Card.Head onClose={() => setShowModalDelete(!showModalDelete)}>
+            <Modal.Card.Title>
+              <h1 className="title">Delete</h1>
+            </Modal.Card.Title>
+          </Modal.Card.Head>
+          <Modal.Card.Body>
+            <h1 className="title">Want to delete this?</h1>
+          </Modal.Card.Body> */}
+        </Modal.Content>
+      </Modal>
     </div>
   );
 };

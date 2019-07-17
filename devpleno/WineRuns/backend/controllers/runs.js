@@ -70,6 +70,9 @@ const remove = ({ db }) => async (req, res) => {
 const create = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   const newRun = req.body;
+  if (newRun.duration === '00:00') {
+    return res.send({ error: true });
+  }
   const runToInsert = {
     friendly_name: newRun.friendly_name,
     duration: newRun.duration,

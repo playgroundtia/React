@@ -10,7 +10,6 @@ import {
   Button,
   Heading,
   Level,
-  Loader,
 } from 'react-bulma-components';
 import Flatpickr from 'react-flatpickr';
 import moment from 'moment';
@@ -128,7 +127,7 @@ const Run = ({ createRun, runs }) => {
                       time_24hr: true,
                     }}
                     onChange={val => {
-                      setErrosCreated(null);
+                      setErrosDistance(null);
                       setValue('duration', moment(val[0]).format('HH:mm'));
                     }}
                   />
@@ -198,17 +197,15 @@ const Run = ({ createRun, runs }) => {
                 <div className="field">
                   <div className="field is-grouped">
                     <div className="control">
-                      <button type="submit" className="button is-primary">
-                        {runs.isSaving ? (
-                          <Loader />
-                        ) : (
-                          <>
-                            <Icon>
-                              <FontAwesomeIcon icon={faSave} />
-                            </Icon>
-                            <span>Save</span>
-                          </>
-                        )}
+                      <button
+                        type="submit"
+                        className={`button is-primary ${runs.isSaving &&
+                          'is-loading'}`}
+                      >
+                        <Icon>
+                          <FontAwesomeIcon icon={faSave} />
+                        </Icon>
+                        <span>Save</span>
                       </button>
                     </div>
                   </div>
