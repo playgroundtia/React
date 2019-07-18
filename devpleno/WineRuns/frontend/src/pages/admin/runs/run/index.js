@@ -14,12 +14,17 @@ import {
 import Flatpickr from 'react-flatpickr';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRunning, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faRunning, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 import useForm from 'react-hook-form';
 import ActionsCreators from '~/redux/actionsCreators';
 
-const Run = ({ createRun, runs }) => {
-  const { handleSubmit, register, errors, setValue, watch } = useForm();
+const Run = ({ createRun, runs, location, updateRun }) => {
+  const { handleSubmit, register, errors, setValue, watch } = useForm({
+    defaultValues: {
+      friendly_name: location.state ? location.state.friendly_name : '',
+      distance: location.state ? location.state.distance : '',
+    },
+  });
   const [showMessage, setShowMessage] = React.useState(false);
   const [errorsCreated, setErrosCreated] = React.useState(null);
   const [errorsDuration, setErrosDistance] = React.useState(null);
@@ -31,13 +36,24 @@ const Run = ({ createRun, runs }) => {
 
   // eslint-disable-next-line consistent-return
   const onSubmit = (values, e) => {
-    if (!values.duration) return setErrosDistance('This field is required');
-    if (!values.created) return setErrosCreated('This field is required');
-    setShowMessage(true);
-    createRun(values);
-    e.target.reset();
-    setValue('duration', null);
-    setValue('created', null);
+    if (location.state) {
+      if (!values.duration && !location.state.duration)
+        return setErrosDistance('This field is required');
+      if (!values.created && !location.state.created)
+        return setErrosCreated('This field is required');
+      const duration = values.duration || location.state.duration;
+      const created = values.created || location.state.created;
+      updateRun({ ...location.state, ...values, duration, created });
+      setShowMessage(true);
+    } else {
+      if (!values.duration) return setErrosDistance('This field is required');
+      if (!values.created) return setErrosCreated('This field is required');
+      createRun(values);
+      e.target.reset();
+      setValue('duration', null);
+      setValue('created', null);
+      setShowMessage(true);
+    }
   };
 
   return (
@@ -49,7 +65,7 @@ const Run = ({ createRun, runs }) => {
               <Icon>
                 <FontAwesomeIcon icon={faRunning} />
               </Icon>
-              Details run
+              {location.state ? 'Edit details run' : 'Add details run'}
             </Card.Header.Icon>
           </Card.Header.Title>
         </header>
@@ -60,7 +76,11 @@ const Run = ({ createRun, runs }) => {
                 <Level.Item>
                   <Heading size={5} subtitle>
                     {!runs.error ? (
-                      <strong> Saved successfully </strong>
+                      <strong>
+                        {location.state
+                          ? 'Edit successfully'
+                          : 'Saved successfully'}
+                      </strong>
                     ) : (
                       <strong> Error </strong>
                     )}
@@ -119,13 +139,12 @@ const Run = ({ createRun, runs }) => {
                       !errorsDuration &&
                       'is-success'} input is-medium`}
                     options={{
-                      defaultHour: 0,
-                      defaultMinute: 0,
                       enableTime: true,
                       noCalendar: true,
                       dateFormat: 'H\\h:i\\m',
                       time_24hr: true,
                     }}
+                    defaultValue={location.state ? location.state.duration : ''}
                     onChange={val => {
                       setErrosDistance(null);
                       setValue('duration', moment(val[0]).format('HH:mm'));
@@ -178,6 +197,11 @@ const Run = ({ createRun, runs }) => {
                       dateFormat: 'F, d Y H:i',
                       maxDate: 'today',
                     }}
+                    defaultValue={
+                      location.state
+                        ? new Date(location.state.created).toISOString()
+                        : ''
+                    }
                     onChange={val => {
                       setErrosCreated(null);
                       setValue('created', val[0]);
@@ -202,10 +226,21 @@ const Run = ({ createRun, runs }) => {
                         className={`button is-primary ${runs.isSaving &&
                           'is-loading'}`}
                       >
-                        <Icon>
-                          <FontAwesomeIcon icon={faSave} />
-                        </Icon>
-                        <span>Save</span>
+                        {location.state ? (
+                          <>
+                            <Icon>
+                              <FontAwesomeIcon icon={faEdit} />
+                            </Icon>
+                            <span>Edit</span>
+                          </>
+                        ) : (
+                          <>
+                            <Icon>
+                              <FontAwesomeIcon icon={faSave} />
+                            </Icon>
+                            <span>Save</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -221,18 +256,29 @@ const Run = ({ createRun, runs }) => {
 
 Run.propTypes = {
   createRun: t.func.isRequired,
+  updateRun: t.func.isRequired,
   runs: t.shape({
     error: t.bool,
     isSaving: t.bool,
   }).isRequired,
+  location: t.shape({
+    state: t.shape({
+      duration: t.string,
+      friendly_name: t.string,
+      distance: t.number,
+      created: t.string,
+    }),
+  }).isRequired,
 };
 
-const mapStateToProps = ({ runs }) => ({
+const mapStateToProps = ({ runs, router }) => ({
+  pathname: router,
   runs,
 });
 
 const mapDispatchToProps = dispatch => ({
   createRun: run => dispatch(ActionsCreators.createRunRequest(run)),
+  updateRun: run => dispatch(ActionsCreators.updateRunRequest(run)),
 });
 
 export default connect(

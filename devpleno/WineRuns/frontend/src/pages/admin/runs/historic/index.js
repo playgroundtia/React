@@ -2,7 +2,8 @@ import React from 'react';
 import t from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Card, Icon, Modal } from 'react-bulma-components';
+import { NavLink } from 'react-router-dom';
+import { Card, Icon, Modal, Button } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRunning,
@@ -12,7 +13,7 @@ import {
 import ReactTable from 'react-table';
 import ActionsCreators from '~/redux/actionsCreators';
 
-const Historic = ({ getRuns, runs }) => {
+const Historic = ({ getRuns, runs, deleteRun }) => {
   const [showModalDelete, setShowModalDelete] = React.useState(false);
   const [objDelete, setObjDelete] = React.useState({});
   React.useEffect(() => {
@@ -55,26 +56,32 @@ const Historic = ({ getRuns, runs }) => {
       Header: '',
       Cell: data => (
         <div className="has-text-centered">
-          <button
-            className="button is-primary is-small"
-            onClick={() => console.log(data.original)}
+          <NavLink
+            to={{
+              pathname: '/admin/runs/run',
+              state: { ...data.original },
+            }}
+            exact
           >
-            <Icon>
-              <FontAwesomeIcon icon={faEdit} />
-            </Icon>
-          </button>
-          <button
-            className="button is-danger is-small"
+            <Button size="small" color="primary">
+              <Icon>
+                <FontAwesomeIcon icon={faEdit} />
+              </Icon>
+            </Button>
+          </NavLink>
+
+          <Button
+            size="small"
+            color="danger"
             onClick={() => {
               setShowModalDelete(!showModalDelete);
               setObjDelete(data.original);
-              console.log(data.original);
             }}
           >
             <Icon>
               <FontAwesomeIcon icon={faTrashAlt} />
             </Icon>
-          </button>
+          </Button>
         </div>
       ),
     },
@@ -104,7 +111,8 @@ const Historic = ({ getRuns, runs }) => {
         showClose
         onClose={() => setShowModalDelete(!showModalDelete)}
       >
-        <Modal.Content>
+        <div className="modal-background" />
+        <div className="modal-content" style={{ overflow: 'hidden' }}>
           <section className="hero is-danger is-bold">
             <div className="hero-body">
               <div className="container">
@@ -119,27 +127,27 @@ const Historic = ({ getRuns, runs }) => {
                 <div className="container">
                   <span className="navbar-item">
                     <div className="buttons">
-                      <button className="button is-info">
+                      <Button
+                        color="warning"
+                        onClick={() => {
+                          deleteRun(objDelete);
+                          setShowModalDelete(!showModalDelete);
+                        }}
+                      >
                         <span>Yes, delete!</span>
-                      </button>
-                      <button className="button" onClick={() => {}}>
+                      </Button>
+                      <Button
+                        onClick={() => setShowModalDelete(!showModalDelete)}
+                      >
                         <span>No!</span>
-                      </button>
+                      </Button>
                     </div>
                   </span>
                 </div>
               </nav>
             </div>
           </section>
-          {/* <Modal.Card.Head onClose={() => setShowModalDelete(!showModalDelete)}>
-            <Modal.Card.Title>
-              <h1 className="title">Delete</h1>
-            </Modal.Card.Title>
-          </Modal.Card.Head>
-          <Modal.Card.Body>
-            <h1 className="title">Want to delete this?</h1>
-          </Modal.Card.Body> */}
-        </Modal.Content>
+        </div>
       </Modal>
     </div>
   );
@@ -147,11 +155,13 @@ const Historic = ({ getRuns, runs }) => {
 
 Historic.propTypes = {
   getRuns: t.func.isRequired,
+  deleteRun: t.func.isRequired,
   data: t.shape({
     value: t.string,
   }).isRequired,
   runs: t.shape({
     data: t.array,
+    deleted: t.bool,
   }).isRequired,
 };
 
@@ -161,6 +171,7 @@ const mapStateToProps = ({ runs }) => ({
 
 const mapDispatchToProps = dispatch => ({
   getRuns: () => dispatch(ActionsCreators.getRunsRequest()),
+  deleteRun: run => dispatch(ActionsCreators.deleteRunRequest(run)),
 });
 
 Historic.propTypes = {

@@ -37,7 +37,7 @@ const Runs = ({ location }) => {
                 'is-active'}`}
             >
               <NavLink to="/admin/runs/run" exact>
-                Add Run
+                Run
               </NavLink>
             </li>
           </ul>
