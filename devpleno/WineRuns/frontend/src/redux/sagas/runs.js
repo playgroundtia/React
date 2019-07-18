@@ -52,7 +52,7 @@ export function* deleteRun({ run }) {
     });
     yield put(ActionCreators.deleteRunSuccess(data));
     yield getRuns();
-    toast.info('delete');
+    toast.info('Delete Success');
   } catch (error) {
     yield put(ActionCreators.deleteRunFailure('error'));
     toast.warn('sem comunicação com a api.');
