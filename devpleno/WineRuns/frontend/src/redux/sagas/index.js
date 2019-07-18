@@ -9,6 +9,7 @@ export default function* rootSaga() {
     takeLatest(Types.SIGNIN_REQUEST, login),
     takeLatest(Types.AUTH_REQUEST, auth),
     takeLatest(Types.LOGOUT, logout),
+    // RUN
     takeLatest(Types.GET_RUNS_REQUEST, getRuns),
     takeLatest(Types.CREATE_RUN_REQUEST, createRun),
     takeLatest(Types.UPDATE_RUN_REQUEST, updateRun),
