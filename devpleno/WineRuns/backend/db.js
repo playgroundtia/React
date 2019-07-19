@@ -17,6 +17,7 @@ const initDB = async () => {
       table.string("role");
       table.string("unit"); // metric // imperial
       table.string("timezone");
+      table.boolean("active");
     });
   }
   const runsExist = await knex.schema.hasTable("runs");
@@ -34,12 +35,24 @@ const initDB = async () => {
   if (totalUsers[0].total === 0) {
     await knex
       .insert({
-        name: "Tiago Neves",
-        email: "tiagoneves.tia@gmail.com",
+        name: "Admin WineRuns",
+        email: "admin@wineruns.com",
         passwd: "@123456",
         role: "admin",
         unit: "metric",
-        timezone: "America/Sao_Paulo"
+        timezone: "America/Sao_Paulo",
+        active: true
+      })
+      .into("users");
+    await knex
+      .insert({
+        name: "Tiago Neves",
+        email: "tiagoneves.tia@gmail.com",
+        passwd: "@123456",
+        role: "teacher",
+        unit: "metric",
+        timezone: "America/Sao_Paulo",
+        active: true
       })
       .into("users");
     await knex
@@ -49,7 +62,8 @@ const initDB = async () => {
         passwd: "@123456",
         role: "user",
         unit: "metric",
-        timezone: "America/Sao_Paulo"
+        timezone: "America/Sao_Paulo",
+        active: false
       })
       .into("users");
   }

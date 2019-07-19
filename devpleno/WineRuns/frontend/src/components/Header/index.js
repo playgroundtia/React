@@ -14,7 +14,7 @@ import {
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import ActionsCreators from '../../redux/actionsCreators';
-import { HOME, USERS, TEACHERS, DASHBOARD, RUNS } from '../../routes';
+import { HOME, USERS, DASHBOARD, RUNS } from '../../routes';
 
 const Logo = require('../../assets/images/Logo.png');
 
@@ -57,20 +57,19 @@ const Header = ({ signin, logout, showModal, hideModal, auth }) => {
                 </NavLink>
                 <NavLink
                   to={USERS}
-                  exact
                   activeClassName="is-active activeNavBar"
                   className="navbar-item navbarItemBar"
                 >
                   Users
                 </NavLink>
-                <NavLink
-                  to={TEACHERS}
+                {/* <NavLink
+                  to={RUNS}
                   exact
                   activeClassName="is-active activeNavBar"
                   className="navbar-item navbarItemBar"
                 >
                   Teachers
-                </NavLink>
+                </NavLink> */}
               </>
             )}
             {auth.isAuth && auth.user.role === 'user' && (

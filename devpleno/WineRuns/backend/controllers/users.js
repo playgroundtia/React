@@ -4,22 +4,27 @@ const login = ({ db, jwt, jwtSecret }) => async (req, res) => {
     .where("email", req.body.email);
   if (users.length === 1) {
     if (users[0].passwd === req.body.passwd) {
-      const { id, name, email, role, unit, timezone } = users[0];
-      const user = {
-        id,
-        name,
-        email,
-        role,
-        unit,
-        timezone
-      };
-      const token = jwt.sign(user, jwtSecret);
-      res.send({ token });
+      if (users[0].active) {
+        const { id, name, email, role, unit, timezone, active } = users[0];
+        const user = {
+          id,
+          name,
+          email,
+          role,
+          unit,
+          timezone,
+          active
+        };
+        const token = jwt.sign(user, jwtSecret);
+        res.send({ token });
+      } else {
+        res.send({ error: true, message: "User is locked!" });
+      }
     } else {
-      res.send({ error: true, message: "wrong credentials" });
+      res.send({ error: true, message: "Wrong credentials" });
     }
   } else {
-    res.send({ error: true, message: "wrong credentials" });
+    res.send({ error: true, message: "Wrong credentials" });
   }
 };
 const get = ({ db }) => async (req, res) => {
@@ -76,7 +81,8 @@ const create = ({ db }) => async (req, res) => {
     email: newUser.email,
     passwd: newUser.passwd,
     unit: newUser.unit,
-    timezone: newUser.timezone
+    timezone: newUser.timezone,
+    active: newUser.active
   };
   // creating new account - without token
   if (!user) {
@@ -106,7 +112,15 @@ const update = ({ db }) => async (req, res) => {
   const updatedUser = req.body;
   let { id } = req.params;
   const userToUpdate = {};
-  const fields = ["name", "role", "email", "passwd", "unit", "timezone"];
+  const fields = [
+    "name",
+    "role",
+    "email",
+    "passwd",
+    "unit",
+    "timezone",
+    "active"
+  ];
   fields.forEach(field => {
     if (updatedUser[field]) {
       userToUpdate[field] = updatedUser[field];

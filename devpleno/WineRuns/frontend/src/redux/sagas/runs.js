@@ -11,7 +11,7 @@ export function* getRuns() {
     yield put(ActionCreators.getRunsSuccess(data));
   } catch (error) {
     yield put(ActionCreators.getRunsFailure('error'));
-    toast.warn('sem comunicação com a api.');
+    toast.warn('Could not found get runs.');
   }
 }
 
@@ -25,7 +25,7 @@ export function* createRun({ run }) {
     yield put(ActionCreators.createRunSuccess(data));
   } catch (error) {
     yield put(ActionCreators.createRunFailure('error'));
-    toast.warn('sem comunicação com a api.');
+    toast.warn('Could not found create run.');
   }
 }
 
@@ -39,7 +39,7 @@ export function* updateRun({ run }) {
     yield put(ActionCreators.updateRunSuccess(data));
   } catch (error) {
     yield put(ActionCreators.updateRunFailure('error'));
-    toast.warn('sem comunicação com a api.');
+    toast.warn('Could not found update run.');
   }
 }
 
@@ -55,6 +55,6 @@ export function* deleteRun({ run }) {
     toast.info('Delete Success');
   } catch (error) {
     yield put(ActionCreators.deleteRunFailure('error'));
-    toast.warn('sem comunicação com a api.');
+    toast.warn('Could not found delete run.');
   }
 }

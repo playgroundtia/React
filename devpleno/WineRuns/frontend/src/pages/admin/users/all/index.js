@@ -13,7 +13,7 @@ import {
 import ReactTable from 'react-table';
 import ActionsCreators from '~/redux/actionsCreators';
 
-const Historic = ({ getRuns, runs, deleteRun }) => {
+const All = ({ getRuns, runs, deleteRun }) => {
   const [showModalDelete, setShowModalDelete] = React.useState(false);
   const [objDelete, setObjDelete] = React.useState({});
   React.useEffect(() => {
@@ -22,12 +22,16 @@ const Historic = ({ getRuns, runs, deleteRun }) => {
 
   const columns = [
     {
-      Header: 'Friendly Name',
-      accessor: 'friendly_name',
+      Header: '',
+      width: 60,
     },
     {
-      Header: 'Duration',
-      accessor: 'duration',
+      Header: 'Name',
+      accessor: 'name',
+    },
+    {
+      Header: 'Email',
+      accessor: 'email',
       Cell: data => (
         <div className="has-text-centered">
           <span>{data.value}</span>
@@ -35,8 +39,8 @@ const Historic = ({ getRuns, runs, deleteRun }) => {
       ),
     },
     {
-      Header: 'Distance',
-      accessor: 'distance',
+      Header: 'Role',
+      accessor: 'role',
       Cell: data => (
         <div className="has-text-centered">
           <span>{data.value}m</span>
@@ -44,8 +48,8 @@ const Historic = ({ getRuns, runs, deleteRun }) => {
       ),
     },
     {
-      Header: 'Created',
-      accessor: 'created',
+      Header: 'Active',
+      accessor: 'active',
       Cell: data => (
         <div className="has-text-centered">
           <span>{moment.utc(data.value).format('DD/MM/YYYY')}</span>
@@ -154,7 +158,7 @@ const Historic = ({ getRuns, runs, deleteRun }) => {
   );
 };
 
-Historic.propTypes = {
+All.propTypes = {
   getRuns: t.func.isRequired,
   deleteRun: t.func.isRequired,
   data: t.shape({
@@ -175,11 +179,11 @@ const mapDispatchToProps = dispatch => ({
   deleteRun: run => dispatch(ActionsCreators.deleteRunRequest(run)),
 });
 
-Historic.propTypes = {
+All.propTypes = {
   getRuns: t.func.isRequired,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Historic);
+)(All);

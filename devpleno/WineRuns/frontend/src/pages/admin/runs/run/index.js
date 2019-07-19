@@ -16,6 +16,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRunning, faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 import useForm from 'react-hook-form';
+import DatePicker from 'react-datepicker';
 import ActionsCreators from '~/redux/actionsCreators';
 
 const Run = ({ createRun, runs, location, updateRun }) => {
@@ -186,25 +187,19 @@ const Run = ({ createRun, runs, location, updateRun }) => {
               <div className="field">
                 <Form.Label>Created</Form.Label>
                 <div className="control">
-                  <Flatpickr
+                  <DatePicker
                     className={`${errorsCreated && 'is-danger'} ${watch() &&
                       !!watch().created &&
                       !errorsCreated &&
                       'is-success'} input is-medium`}
-                    options={{
-                      enableTime: true,
-                      time_24hr: true,
-                      dateFormat: 'F, d Y H:i',
-                      maxDate: 'today',
-                    }}
-                    defaultValue={
-                      location.state
-                        ? new Date(location.state.created).toISOString()
-                        : ''
-                    }
+                    selected={watch(
+                      'created',
+                      location.state ? new Date(location.state.created) : ''
+                    )}
+                    maxDate={new Date()}
                     onChange={val => {
+                      setValue('created', val);
                       setErrosCreated(null);
-                      setValue('created', val[0]);
                     }}
                   />
                   {errorsCreated && (

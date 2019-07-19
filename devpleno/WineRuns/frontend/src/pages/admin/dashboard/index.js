@@ -1,4 +1,5 @@
 import React from 'react';
+import t from 'prop-types';
 import {
   Box,
   Tile,
@@ -7,8 +8,9 @@ import {
   Section,
   Level,
 } from 'react-bulma-components';
+import { connect } from 'react-redux';
 
-export default function dashboard() {
+const Dashboard = ({ runs, auth }) => {
   return (
     <>
       <Section className="is-title-bar">
@@ -35,9 +37,9 @@ export default function dashboard() {
                     notification
                     color="primary"
                   >
-                    <Heading size={1}>10</Heading>
+                    <Heading size={1}>{runs.data.length}</Heading>
                     <Heading subtitle size={3}>
-                      Users
+                      {runs.data.length > 1 ? 'Runs' : 'Run'}
                     </Heading>
                   </Tile>
                   <Tile
@@ -58,7 +60,7 @@ export default function dashboard() {
                     color="info"
                   >
                     <Heading>Picture of the day.</Heading>
-                    <Heading subtitle>Users Tiago Neves.</Heading>
+                    <Heading subtitle>Users {auth.user.name}.</Heading>
                     <Image
                       size="4by3"
                       src="http://bulma.io/images/placeholders/640x480.png"
@@ -101,4 +103,22 @@ export default function dashboard() {
       </Section>
     </>
   );
-}
+};
+
+Dashboard.propTypes = {
+  runs: t.shape({
+    data: t.array,
+  }).isRequired,
+  auth: t.shape({
+    user: t.shape({
+      name: t.string,
+    }),
+  }).isRequired,
+};
+
+const mapStateToProps = ({ runs, auth }) => ({
+  runs,
+  auth,
+});
+
+export default connect(mapStateToProps)(Dashboard);

@@ -7,27 +7,24 @@ import ActionsCreators from '../actionsCreators';
 
 export function* login(action) {
   try {
-    const {
-      data: { token },
-    } = yield call(api.post, '/users/login', {
+    const { data } = yield call(api.post, '/users/login', {
       email: action.email,
       passwd: action.passwd,
     });
-    if (token) {
-      localStorage.setItem('@WineRuns/TOKEN', token);
-      const user = jwtDecode(token);
+    if (data.token) {
+      localStorage.setItem('@WineRuns/TOKEN', data.token);
+      const user = jwtDecode(data.token);
       localStorage.setItem('@WineRuns/USER', user);
       yield put(ActionsCreators.signinSuccess(user));
-      toast.success('Logado com sucesso!');
       yield put(ActionsCreators.hideModal());
       yield put(push('/admin'));
     } else {
-      yield put(ActionsCreators.signinFailure('Error ao Logar'));
-      toast.error('Verifique o seu e-mail/senha!');
+      yield put(ActionsCreators.signinFailure(data.message));
+      toast.error(data.message);
     }
   } catch (error) {
-    yield put(ActionsCreators.signinFailure('Error ao Logar'));
-    toast.error('Verifique o seu e-mail/senha!');
+    yield put(ActionsCreators.signinFailure(error.message));
+    toast.error(error.message);
   }
 }
 
