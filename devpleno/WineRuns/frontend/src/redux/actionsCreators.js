@@ -29,6 +29,22 @@ export const { Types, Creators } = createActions({
   deleteRunRequest: ['run'],
   deleteRunSuccess: ['runs'],
   deleteRunFailure: ['error'],
+
+  getUsersRequest: null,
+  getUsersSuccess: ['users'],
+  getUsersFailure: ['error'],
+
+  createUserRequest: ['user'],
+  createUserSuccess: ['user'],
+  createUserFailure: ['error'],
+
+  updateUserRequest: ['user'],
+  updateUserSuccess: ['user'],
+  updateUserFailure: ['error'],
+
+  deleteUserRequest: ['user'],
+  deleteUserSuccess: ['users'],
+  deleteUserFailure: ['error'],
 });
 
 export default Creators;

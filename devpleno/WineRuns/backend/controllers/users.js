@@ -30,7 +30,7 @@ const login = ({ db, jwt, jwtSecret }) => async (req, res) => {
 const get = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   if (user.role === "admin") {
-    const users = await db("users").select();
+    const users = await db("users").select().whereNot('id', user.id);
     res.send(users);
   } else {
     const users = await db("users")

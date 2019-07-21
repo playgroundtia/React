@@ -1,24 +1,26 @@
 import React from 'react';
 import t from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { NavLink } from 'react-router-dom';
 import { Card, Icon, Modal, Button } from 'react-bulma-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faRunning,
   faTrashAlt,
   faEdit,
+  faUsers,
+  faUserCircle,
+  faUserTie,
+  faChalkboardTeacher,
 } from '@fortawesome/free-solid-svg-icons';
 import ReactTable from 'react-table';
 import ActionsCreators from '~/redux/actionsCreators';
 
-const All = ({ getRuns, runs, deleteRun }) => {
+const All = ({ getUsers, deleteUser, users }) => {
   const [showModalDelete, setShowModalDelete] = React.useState(false);
   const [objDelete, setObjDelete] = React.useState({});
   React.useEffect(() => {
-    getRuns();
-  }, [getRuns]);
+    getUsers();
+  }, [getUsers]);
 
   const columns = [
     {
@@ -43,51 +45,64 @@ const All = ({ getRuns, runs, deleteRun }) => {
       accessor: 'role',
       Cell: data => (
         <div className="has-text-centered">
-          <span>{data.value}m</span>
+          <Icon color="dark">
+            {data.value === 'admin' && <FontAwesomeIcon icon={faUserTie} />}
+            {data.value === 'user' && <FontAwesomeIcon icon={faUserCircle} />}
+            {data.value === 'teacher' && (
+              <FontAwesomeIcon icon={faChalkboardTeacher} />
+            )}
+          </Icon>
         </div>
       ),
     },
     {
       Header: 'Active',
       accessor: 'active',
+      width: 120,
       Cell: data => (
         <div className="has-text-centered">
-          <span>{moment.utc(data.value).format('DD/MM/YYYY')}</span>
+          <span
+            className={`tag is-link ${data.value ? 'is-success' : 'is-danger'}`}
+          >
+            {data.value ? 'active' : 'inactive'}
+          </span>
         </div>
       ),
     },
     {
       Header: '',
-      width: 80,
+      width: 120,
       Cell: data => (
-        <div className="has-text-centered">
-          <NavLink
-            to={{
-              pathname: '/admin/runs/run',
-              state: { ...data.original },
-            }}
-            exact
-          >
-            <Button size="small" color="primary">
+        <span>
+          <div className="has-text-centered">
+            <NavLink
+              to={{
+                pathname: '/admin/users/user',
+                state: { ...data.original },
+              }}
+              exact
+            >
+              <Button size="small" color="primary">
+                <Icon>
+                  <FontAwesomeIcon icon={faEdit} />
+                </Icon>
+              </Button>
+            </NavLink>
+
+            <Button
+              size="small"
+              color="danger"
+              onClick={() => {
+                setShowModalDelete(!showModalDelete);
+                setObjDelete(data.original);
+              }}
+            >
               <Icon>
-                <FontAwesomeIcon icon={faEdit} />
+                <FontAwesomeIcon icon={faTrashAlt} />
               </Icon>
             </Button>
-          </NavLink>
-
-          <Button
-            size="small"
-            color="danger"
-            onClick={() => {
-              setShowModalDelete(!showModalDelete);
-              setObjDelete(data.original);
-            }}
-          >
-            <Icon>
-              <FontAwesomeIcon icon={faTrashAlt} />
-            </Icon>
-          </Button>
-        </div>
+          </div>
+        </span>
       ),
     },
   ];
@@ -96,9 +111,9 @@ const All = ({ getRuns, runs, deleteRun }) => {
       <header className="card-header">
         <p className="card-header-title">
           <Icon>
-            <FontAwesomeIcon icon={faRunning} />
+            <FontAwesomeIcon icon={faUsers} />
           </Icon>
-          <span>Runs</span>
+          <span>Users</span>
         </p>
       </header>
       <Card.Content>
@@ -107,7 +122,7 @@ const All = ({ getRuns, runs, deleteRun }) => {
           noDataText="No runs found"
           showPageSizeOptions={false}
           defaultPageSize={5}
-          data={runs.data}
+          data={users.data}
           columns={columns}
         />
       </Card.Content>
@@ -122,9 +137,7 @@ const All = ({ getRuns, runs, deleteRun }) => {
             <div className="hero-body">
               <div className="container">
                 <h1 className="title">Delete</h1>
-                <h2 className="subtitle">
-                  Want to {objDelete.friendly_name} ?
-                </h2>
+                <h2 className="subtitle">Want to User: {objDelete.name} ?</h2>
               </div>
             </div>
             <div className="hero-foot">
@@ -135,7 +148,7 @@ const All = ({ getRuns, runs, deleteRun }) => {
                       <Button
                         color="warning"
                         onClick={() => {
-                          deleteRun(objDelete);
+                          deleteUser(objDelete);
                           setShowModalDelete(!showModalDelete);
                         }}
                       >
@@ -159,29 +172,24 @@ const All = ({ getRuns, runs, deleteRun }) => {
 };
 
 All.propTypes = {
-  getRuns: t.func.isRequired,
-  deleteRun: t.func.isRequired,
+  getUsers: t.func.isRequired,
+  deleteUser: t.func.isRequired,
   data: t.shape({
     value: t.string,
   }).isRequired,
-  runs: t.shape({
+  users: t.shape({
     data: t.array,
-    deleted: t.bool,
   }).isRequired,
 };
 
-const mapStateToProps = ({ runs }) => ({
-  runs,
+const mapStateToProps = ({ users }) => ({
+  users,
 });
 
 const mapDispatchToProps = dispatch => ({
-  getRuns: () => dispatch(ActionsCreators.getRunsRequest()),
-  deleteRun: run => dispatch(ActionsCreators.deleteRunRequest(run)),
+  getUsers: () => dispatch(ActionsCreators.getUsersRequest()),
+  deleteUser: user => dispatch(ActionsCreators.deleteUserRequest(user)),
 });
-
-All.propTypes = {
-  getRuns: t.func.isRequired,
-};
 
 export default connect(
   mapStateToProps,

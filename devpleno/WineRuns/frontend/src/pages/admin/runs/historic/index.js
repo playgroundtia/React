@@ -162,7 +162,6 @@ Historic.propTypes = {
   }).isRequired,
   runs: t.shape({
     data: t.array,
-    deleted: t.bool,
   }).isRequired,
 };
 
