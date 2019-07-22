@@ -8,6 +8,7 @@ import {
   Section,
   Level,
   Button,
+  Container,
 } from 'react-bulma-components';
 import { connect } from 'react-redux';
 import ActionsCreators from '~/redux/actionsCreators';
@@ -30,7 +31,7 @@ const Dashboard = ({ runs, auth, users, getUsers }) => {
           </Level.Side>
         </Level>
       </Section>
-      <Section>
+      <Container>
         <Box>
           <Tile kind="ancestor">
             <Tile size={7} vertical>
@@ -50,14 +51,15 @@ const Dashboard = ({ runs, auth, users, getUsers }) => {
                         </Heading>
                       </>
                     )}
-                    {auth.user.role === 'user' && auth.user.teacher ? (
+                    {auth.user.role === 'user' && auth.user.teacher && (
                       <>
                         <Heading size={1}>{runs.data.length}</Heading>
                         <Heading subtitle size={3}>
                           {runs.data.length > 1 ? 'Runs' : 'Run'}
                         </Heading>
                       </>
-                    ) : (
+                    )}
+                    {auth.user.role === 'user' && !auth.user.teacher && (
                       <>
                         <Heading>No Teacher!</Heading>
                         <Heading subtitle>
@@ -74,14 +76,15 @@ const Dashboard = ({ runs, auth, users, getUsers }) => {
                     notification
                     color="warning"
                   >
-                    {auth.user.role === 'user' && auth.user.profile ? (
+                    {auth.user.role === 'user' && auth.user.profile && (
                       <>
                         <Heading size={1}>{runs.data.length}</Heading>
                         <Heading subtitle size={3}>
                           {runs.data.length > 1 ? 'Runs' : 'Run'}
                         </Heading>
                       </>
-                    ) : (
+                    )}
+                    {auth.user.role === 'user' && !auth.user.profile && (
                       <>
                         <Heading>Edit Profile!</Heading>
                         <Heading subtitle>
@@ -141,7 +144,7 @@ const Dashboard = ({ runs, auth, users, getUsers }) => {
             </Tile>
           </Tile>
         </Box>
-      </Section>
+      </Container>
     </>
   );
 };

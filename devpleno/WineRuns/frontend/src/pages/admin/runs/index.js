@@ -33,7 +33,7 @@ const Runs = ({ location }) => {
           </Level.Side>
         </Level>
       </Section>
-      <Section>
+      <Container>
         <div className="tabs is-medium">
           <ul>
             <li
@@ -62,7 +62,7 @@ const Runs = ({ location }) => {
             </Switch>
           </React.Suspense>
         </Container>
-      </Section>
+      </Container>
     </>
   );
 };

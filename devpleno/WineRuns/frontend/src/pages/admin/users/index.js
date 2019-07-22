@@ -21,7 +21,7 @@ const Users = ({ location }) => {
           </Level.Side>
         </Level>
       </Section>
-      <Section>
+      <Container>
         <div className="tabs is-medium">
           <ul>
             <li
@@ -50,7 +50,7 @@ const Users = ({ location }) => {
             </Switch>
           </React.Suspense>
         </Container>
-      </Section>
+      </Container>
     </>
   );
 };
