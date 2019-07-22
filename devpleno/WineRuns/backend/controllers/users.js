@@ -30,7 +30,9 @@ const login = ({ db, jwt, jwtSecret }) => async (req, res) => {
 const get = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   if (user.role === "admin") {
-    const users = await db("users").select().whereNot('id', user.id);
+    const users = await db("users")
+      .select()
+      .whereNot("id", user.id);
     res.send(users);
   } else {
     const users = await db("users")
@@ -72,7 +74,6 @@ const remove = ({ db }) => async (req, res) => {
     res.send({ success: true });
   }
 };
-
 const create = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   const newUser = req.body;
@@ -82,7 +83,8 @@ const create = ({ db }) => async (req, res) => {
     passwd: newUser.passwd,
     unit: newUser.unit,
     timezone: newUser.timezone,
-    active: newUser.active
+    active: newUser.active,
+    passwd: "@winerunsuser"
   };
   // creating new account - without token
   if (!user) {
@@ -103,10 +105,18 @@ const create = ({ db }) => async (req, res) => {
     return res.send({ error: true, message: "email already taken." });
   }
 
+  if (userToInsert.role === "teacher") {
+    const idUser = await db.insert(userToInsert).into("users");
+    const teacherToInsert = {
+      user_id: idUser[0]
+    };
+    await db.insert(teacherToInsert).into("teachers");
+    return res.send(userToInsert);
+  }
+
   await db.insert(userToInsert).into("users");
   res.send(userToInsert);
 };
-
 const update = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   const updatedUser = req.body;
@@ -143,7 +153,6 @@ const update = ({ db }) => async (req, res) => {
 
   res.send(userToUpdate);
 };
-
 module.exports = {
   login,
   get,

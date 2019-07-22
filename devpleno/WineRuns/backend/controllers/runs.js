@@ -32,7 +32,6 @@ const get = ({ db }) => async (req, res) => {
     });
   }
 };
-
 const getOne = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   let id = req.params.id;
@@ -65,7 +64,6 @@ const remove = ({ db }) => async (req, res) => {
     res.send({ success: true });
   }
 };
-
 const create = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   const newRun = req.body;
@@ -80,7 +78,6 @@ const create = ({ db }) => async (req, res) => {
   await db.insert(runToInsert).into("runs");
   res.send(runToInsert);
 };
-
 const update = ({ db }) => async (req, res) => {
   const { user } = res.locals;
   const updatedRun = req.body;
@@ -110,7 +107,6 @@ const update = ({ db }) => async (req, res) => {
 
   res.send(runToUpdate);
 };
-
 module.exports = {
   get,
   getOne,

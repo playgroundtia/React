@@ -7,10 +7,15 @@ import {
   Image,
   Section,
   Level,
+  Button,
 } from 'react-bulma-components';
 import { connect } from 'react-redux';
+import ActionsCreators from '~/redux/actionsCreators';
 
-const Dashboard = ({ runs, auth }) => {
+const Dashboard = ({ runs, auth, users, getUsers }) => {
+  React.useEffect(() => {
+    getUsers();
+  }, [getUsers]);
   return (
     <>
       <Section className="is-title-bar">
@@ -37,10 +42,31 @@ const Dashboard = ({ runs, auth }) => {
                     notification
                     color="primary"
                   >
-                    <Heading size={1}>{runs.data.length}</Heading>
-                    <Heading subtitle size={3}>
-                      {runs.data.length > 1 ? 'Runs' : 'Run'}
-                    </Heading>
+                    {auth.user.role === 'admin' && (
+                      <>
+                        <Heading size={1}>{users.data.length}</Heading>
+                        <Heading subtitle size={3}>
+                          {users.data.length > 1 ? 'Users' : 'User'}
+                        </Heading>
+                      </>
+                    )}
+                    {auth.user.role === 'user' && auth.user.teacher ? (
+                      <>
+                        <Heading size={1}>{runs.data.length}</Heading>
+                        <Heading subtitle size={3}>
+                          {runs.data.length > 1 ? 'Runs' : 'Run'}
+                        </Heading>
+                      </>
+                    ) : (
+                      <>
+                        <Heading>No Teacher!</Heading>
+                        <Heading subtitle>
+                          <Button>
+                            <span>Add teacher!</span>
+                          </Button>
+                        </Heading>
+                      </>
+                    )}
                   </Tile>
                   <Tile
                     renderAs="article"
@@ -48,8 +74,23 @@ const Dashboard = ({ runs, auth }) => {
                     notification
                     color="warning"
                   >
-                    <Heading>Tiles...</Heading>
-                    <Heading subtitle>Bottom Tile...</Heading>
+                    {auth.user.role === 'user' && auth.user.profile ? (
+                      <>
+                        <Heading size={1}>{runs.data.length}</Heading>
+                        <Heading subtitle size={3}>
+                          {runs.data.length > 1 ? 'Runs' : 'Run'}
+                        </Heading>
+                      </>
+                    ) : (
+                      <>
+                        <Heading>Edit Profile!</Heading>
+                        <Heading subtitle>
+                          <Button>
+                            <span>edit</span>
+                          </Button>
+                        </Heading>
+                      </>
+                    )}
                   </Tile>
                 </Tile>
                 <Tile kind="parent">
@@ -106,19 +147,34 @@ const Dashboard = ({ runs, auth }) => {
 };
 
 Dashboard.propTypes = {
+  getUsers: t.func.isRequired,
   runs: t.shape({
+    data: t.array,
+  }).isRequired,
+  users: t.shape({
     data: t.array,
   }).isRequired,
   auth: t.shape({
     user: t.shape({
       name: t.string,
+      role: t.string,
+      teacher: t.shape({}),
+      profile: t.shape({}),
     }),
   }).isRequired,
 };
 
-const mapStateToProps = ({ runs, auth }) => ({
+const mapStateToProps = ({ runs, auth, users }) => ({
   runs,
   auth,
+  users,
 });
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = dispatch => ({
+  getUsers: () => dispatch(ActionsCreators.getUsersRequest()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Dashboard);

@@ -15,7 +15,7 @@ const initDB = async () => {
       table.string("email");
       table.string("passwd");
       table.string("role");
-      table.string("unit"); // metric // imperial
+      table.string("unit");
       table.string("timezone");
       table.boolean("active");
     });
@@ -31,6 +31,13 @@ const initDB = async () => {
       table.integer("distance"); // meters
     });
   }
+  const teachersExist = await knex.schema.hasTable("teachers");
+  if (!teachersExist) {
+    await knex.schema.createTable("teachers", table => {
+      table.increments("id").primary();
+      table.integer("user_id");
+    });
+  }
   const totalUsers = await knex("users").select(knex.raw("count(*) as total"));
   if (totalUsers[0].total === 0) {
     await knex
@@ -44,28 +51,28 @@ const initDB = async () => {
         active: true
       })
       .into("users");
-    await knex
-      .insert({
-        name: "Tiago Neves",
-        email: "tiagoneves.tia@gmail.com",
-        passwd: "@123456",
-        role: "teacher",
-        unit: "metric",
-        timezone: "America/Sao_Paulo",
-        active: true
-      })
-      .into("users");
-    await knex
-      .insert({
-        name: "Mara Jeannie",
-        email: "marajeannie@gmail.com",
-        passwd: "@123456",
-        role: "user",
-        unit: "metric",
-        timezone: "America/Sao_Paulo",
-        active: false
-      })
-      .into("users");
+    // await knex
+    //   .insert({
+    //     name: "Tiago Neves",
+    //     email: "tiagoneves.tia@gmail.com",
+    //     passwd: "@123456",
+    //     role: "teacher",
+    //     unit: "metric",
+    //     timezone: "America/Sao_Paulo",
+    //     active: true
+    //   })
+    //   .into("users");
+    // await knex
+    //   .insert({
+    //     name: "Mara Jeannie",
+    //     email: "marajeannie@gmail.com",
+    //     passwd: "@123456",
+    //     role: "user",
+    //     unit: "metric",
+    //     timezone: "America/Sao_Paulo",
+    //     active: false
+    //   })
+    //   .into("users");
   }
 };
 initDB();

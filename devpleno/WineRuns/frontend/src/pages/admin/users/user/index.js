@@ -17,7 +17,7 @@ import useForm from 'react-hook-form';
 import ActionsCreators from '~/redux/actionsCreators';
 
 const User = ({ location, createUser, updateUser, users }) => {
-  const { handleSubmit, register, errors, watch, getValues } = useForm({
+  const { handleSubmit, register, errors, watch } = useForm({
     defaultValues: {
       email: location.state ? location.state.email : '',
       name: location.state ? location.state.name : '',
@@ -26,11 +26,6 @@ const User = ({ location, createUser, updateUser, users }) => {
     },
   });
   const [showMessage, setShowMessage] = React.useState(false);
-  const [isUser, setIsUser] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsUser(getValues().role === 'user');
-  }, [getValues]);
 
   // eslint-disable-next-line consistent-return
   const onSubmit = (values, e) => {
@@ -165,35 +160,6 @@ const User = ({ location, createUser, updateUser, users }) => {
                 </div>
               </div>
             </Columns.Column>
-            {isUser && (
-              <Columns.Column size={3}>
-                <div className="field">
-                  <Form.Label>Teacher</Form.Label>
-                  <div className="control">
-                    <div
-                      className={`${errors.teacher && 'is-danger'} ${watch() &&
-                        !!watch().teacher &&
-                        !errors.teacher &&
-                        'is-success'} select is-medium`}
-                    >
-                      <select
-                        ref={register({
-                          required: 'This field is required',
-                        })}
-                        name="teacher"
-                      >
-                        <option>Not have a teacher</option>
-                        <option>Tiago Neves</option>
-                        <option>Mara Jeannie</option>
-                      </select>
-                    </div>
-                    {errors.teacher && (
-                      <p className="help is-danger">{errors.teacher.message}</p>
-                    )}
-                  </div>
-                </div>
-              </Columns.Column>
-            )}
             <Columns.Column size={3}>
               <div className="field">
                 <Form.Label>Active</Form.Label>
@@ -263,6 +229,7 @@ User.propTypes = {
   users: t.shape({
     error: t.bool,
     isSaving: t.bool,
+    data: t.any,
   }).isRequired,
   location: t.shape({
     state: t.shape({

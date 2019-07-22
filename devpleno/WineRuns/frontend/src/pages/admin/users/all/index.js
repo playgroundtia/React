@@ -30,6 +30,11 @@ const All = ({ getUsers, deleteUser, users }) => {
     {
       Header: 'Name',
       accessor: 'name',
+      Cell: data => (
+        <div className="has-text-centered">
+          <span>{data.value}</span>
+        </div>
+      ),
     },
     {
       Header: 'Email',
@@ -46,9 +51,13 @@ const All = ({ getUsers, deleteUser, users }) => {
       Cell: data => (
         <div className="has-text-centered">
           <Icon color="dark">
-            {data.value === 'admin' && <FontAwesomeIcon icon={faUserTie} />}
-            {data.value === 'user' && <FontAwesomeIcon icon={faUserCircle} />}
-            {data.value === 'teacher' && (
+            {data && data.value === 'admin' && (
+              <FontAwesomeIcon icon={faUserTie} />
+            )}
+            {data && data.value === 'user' && (
+              <FontAwesomeIcon icon={faUserCircle} />
+            )}
+            {data && data.value === 'teacher' && (
               <FontAwesomeIcon icon={faChalkboardTeacher} />
             )}
           </Icon>

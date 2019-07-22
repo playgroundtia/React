@@ -5,7 +5,7 @@ const auth = require("./auth");
 
 const db = require("../db");
 const jwt = require("jsonwebtoken");
-const jwtSecret = "DevPlenoRocks!";
+const jwtSecret = "@WineRunsPalavraSuperSecretakkkk!";
 
 router.post("/login", controller.login({ db, jwt, jwtSecret }));
 router.post(

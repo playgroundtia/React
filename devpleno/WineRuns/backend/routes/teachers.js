@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const controller = require("../controllers/runs");
+const controller = require("../controllers/teachers");
 
 const auth = require("./auth");
 
@@ -8,10 +8,6 @@ const jwt = require("jsonwebtoken");
 const jwtSecret = "@WineRunsPalavraSuperSecretakkkk!";
 
 router.use(auth.checkJWT({ jwt, jwtSecret }));
-router.post("/", controller.create({ db }));
 router.get("/", controller.get({ db }));
-router.patch("/:id", controller.update({ db }));
-router.get("/:id", controller.getOne({ db }));
-router.delete("/:id", controller.remove({ db }));
 
 module.exports = router;
